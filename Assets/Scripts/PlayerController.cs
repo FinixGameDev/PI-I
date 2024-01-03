@@ -7,12 +7,13 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private Vector3 _direction;
     [SerializeField] private float _forwardSpeed = 5f;
+    [SerializeField] private float _strafeSpeed = 3.5f;
 
     private int _desiredLane = 1; //left lane = 0; middle lane = 1; right lane = 2
     [SerializeField] float _laneDistance = 2.5f; //distance between lanes
 
-    [SerializeField] private float _jumpForce = 8;
-    [SerializeField] private float _gravity = -30f;
+    [SerializeField] private float _jumpForce = 200;
+    [SerializeField] private float _gravity = -9.98f;
 
     // Start is called before the first frame update
     void Start()
@@ -23,10 +24,8 @@ public class PlayerController : MonoBehaviour
     // Update is called every frame
     private void Update()
     {
-        _direction.z = _forwardSpeed;
-        _direction.y += _gravity * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) && _controller.isGrounded)
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _controller.isGrounded)
             Jump();
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
@@ -42,30 +41,33 @@ public class PlayerController : MonoBehaviour
             if (_desiredLane < 0)
                 _desiredLane = 0;
         }
-
-        //Calculate where we should be in the future
-        Vector3 targetPosition = transform.position.z * transform.forward + transform.position.y * transform.up;
-
-        switch (_desiredLane)
-        {
-            case 0:
-                targetPosition += Vector3.left * _laneDistance;
-                break;
-            case 2:
-                targetPosition += Vector3.right * _laneDistance;
-                break;
-        }
-
-        transform.position = Vector3.Lerp(transform.position, targetPosition, 80 * Time.fixedDeltaTime);
     }
 
     private void FixedUpdate()
     {
-       _controller.Move(_direction * Time.fixedDeltaTime);
+        float targetX = _desiredLane * _laneDistance - _laneDistance;
+
+        _direction.x = targetX - transform.position.x >= 0.05f ? _laneDistance * _strafeSpeed : 
+                       targetX - transform.position.x <= -0.05f ? -_laneDistance * _strafeSpeed : 
+                        0;
+
+        _direction.z = _forwardSpeed;
+        _direction.y += _gravity * Time.fixedDeltaTime;
+
+        _controller.Move(_direction * Time.fixedDeltaTime);
     }
 
     private void Jump()
     {
         _direction.y = _jumpForce;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.transform.tag == "Obstacle")
+        {
+            PlayerManager.gameOver = true;
+        }
+
     }
 }
