@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jumpForce = 200;
     [SerializeField] private float _gravity = -9.98f;
 
+    [SerializeField] private ParticleSystem _dustParticles;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,10 @@ public class PlayerController : MonoBehaviour
     // Update is called every frame
     private void Update()
     {
+        if (_controller.isGrounded)
+            _dustParticles.Play();
+        else
+            _dustParticles.Stop();
 
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _controller.isGrounded)
             Jump();
