@@ -16,32 +16,40 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _gravity = -9.98f;
 
     [SerializeField] private ParticleSystem _dustParticles;
+    [SerializeField] private ParticleSystem _impactParticles;
+
+    [SerializeField] private float _maxSpeed = 10f;
+
+    private Animator _animator;
 
     // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     // Update is called every frame
     private void Update()
     {
-        if (_controller.isGrounded)
+        _animator.SetBool("isGrounded", _controller.isGrounded);
+
+        if (_controller.isGrounded && PlayerManager.isGameStarted)
             _dustParticles.Play();
         else
             _dustParticles.Stop();
 
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && _controller.isGrounded)
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || SwipeManager.swipeUp) && _controller.isGrounded)
             Jump();
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || SwipeManager.swipeRight)
         {
             _desiredLane++;
             if (_desiredLane > 2)
                 _desiredLane = 2;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || SwipeManager.swipeLeft)
         {
             _desiredLane--;
             if (_desiredLane < 0)
@@ -60,7 +68,11 @@ public class PlayerController : MonoBehaviour
         _direction.z = _forwardSpeed;
         _direction.y += _gravity * Time.fixedDeltaTime;
 
-        _controller.Move(_direction * Time.fixedDeltaTime);
+        if (PlayerManager.isGameStarted)
+        {
+            _controller.Move(_direction * Time.fixedDeltaTime);
+            _animator.SetBool("isGameStarted", true);
+        }
     }
 
     private void Jump()
@@ -72,7 +84,8 @@ public class PlayerController : MonoBehaviour
     {
         if (hit.transform.tag == "Obstacle")
         {
-            PlayerManager.gameOver = true;
+            _animator.SetTrigger("hit");
+            _impactParticles.Play();
         }
 
     }

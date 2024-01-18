@@ -9,6 +9,7 @@ public class Car : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += -transform.forward * Time.deltaTime * Speed;
+        if (PlayerManager.isGameStarted)
+            transform.position += -transform.forward * Time.deltaTime * Speed;
     }
 }
