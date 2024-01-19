@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         _animator.speed = forwardSpeed / 10;
         _animator.SetBool("isGrounded", _controller.isGrounded);
 
-        forwardSpeed += 1f * Time.deltaTime;
+        forwardSpeed += 2f * Time.deltaTime;
 
         //Control DustParticles
         if (_controller.isGrounded && PlayerManager.isGameStarted)
