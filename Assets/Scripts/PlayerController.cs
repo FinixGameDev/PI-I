@@ -34,11 +34,21 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetBool("isGrounded", _controller.isGrounded);
 
+        //Test for speed, replace with energy system logic later
+        if (_forwardSpeed < _maxSpeed)
+        {
+            _forwardSpeed += 0.1f * Time.deltaTime;
+        }
+
+        //Control DustParticles
         if (_controller.isGrounded && PlayerManager.isGameStarted)
+        {
             _dustParticles.Play();
+        }
         else
             _dustParticles.Stop();
 
+        //Check movement
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || SwipeManager.swipeUp) && _controller.isGrounded)
             Jump();
 
@@ -55,14 +65,19 @@ public class PlayerController : MonoBehaviour
             if (_desiredLane < 0)
                 _desiredLane = 0;
         }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || SwipeManager.swipeDown)
+        {
+            StartCoroutine(Slide());
+        }
     }
 
     private void FixedUpdate()
     {
         float targetX = _desiredLane * _laneDistance - _laneDistance;
 
-        _direction.x = targetX - transform.position.x >= 0.05f ? _laneDistance * _strafeSpeed : 
-                       targetX - transform.position.x <= -0.05f ? -_laneDistance * _strafeSpeed : 
+        _direction.x = targetX - transform.position.x >= 0.08f ? _laneDistance * _strafeSpeed : 
+                       targetX - transform.position.x <= -0.08f ? -_laneDistance * _strafeSpeed : 
                         0;
 
         _direction.z = _forwardSpeed;
@@ -86,7 +101,20 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetTrigger("hit");
             _impactParticles.Play();
+            _dustParticles.Stop();
         }
 
+    }
+
+    private IEnumerator Slide()
+    {
+        _animator.SetTrigger("slide");
+        _controller.height = 1;
+        _controller.center = new Vector3(0, -0.5f);
+
+        yield return new WaitForSeconds(1.4f);
+
+        _controller.height = 2;
+        _controller.center = Vector3.zero;
     }
 }
