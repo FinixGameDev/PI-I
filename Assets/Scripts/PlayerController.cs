@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private CharacterController _controller;
-    private Vector3 _direction;
-    [SerializeField] private float _forwardSpeed = 5f;
+    public float forwardSpeed = 10f;
+
     [SerializeField] private float _strafeSpeed = 3.5f;
 
     private int _desiredLane = 1; //left lane = 0; middle lane = 1; right lane = 2
@@ -18,9 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem _dustParticles;
     [SerializeField] private ParticleSystem _impactParticles;
 
-    [SerializeField] private float _maxSpeed = 10f;
-
     private Animator _animator;
+    private CharacterController _controller;
+    private Vector3 _direction;
 
     // Start is called before the first frame update
     void Start()
@@ -32,13 +31,10 @@ public class PlayerController : MonoBehaviour
     // Update is called every frame
     private void Update()
     {
+        _animator.speed = forwardSpeed / 10;
         _animator.SetBool("isGrounded", _controller.isGrounded);
 
-        //Test for speed, replace with energy system logic later
-        if (_forwardSpeed < _maxSpeed)
-        {
-            _forwardSpeed += 0.1f * Time.deltaTime;
-        }
+        forwardSpeed += 1f * Time.deltaTime;
 
         //Control DustParticles
         if (_controller.isGrounded && PlayerManager.isGameStarted)
@@ -80,7 +76,7 @@ public class PlayerController : MonoBehaviour
                        targetX - transform.position.x <= -0.08f ? -_laneDistance * _strafeSpeed : 
                         0;
 
-        _direction.z = _forwardSpeed;
+        _direction.z = forwardSpeed;
         _direction.y += _gravity * Time.fixedDeltaTime;
 
         if (PlayerManager.isGameStarted)
@@ -102,6 +98,8 @@ public class PlayerController : MonoBehaviour
             _animator.SetTrigger("hit");
             _impactParticles.Play();
             _dustParticles.Stop();
+
+            forwardSpeed = Mathf.Min(forwardSpeed--, 10);
         }
 
     }

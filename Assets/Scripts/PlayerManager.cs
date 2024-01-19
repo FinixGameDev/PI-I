@@ -7,12 +7,17 @@ public class PlayerManager : MonoBehaviour
 {
     public static bool gameOver;
     public static bool isGameStarted;
+
     public GameObject gameOverPanel;
     public GameObject startPanel;
     public PlayerController player;
     public int winDistance = 1000;
 
     [SerializeField] Image progressBar;
+    [SerializeField] Image energyBar;
+
+    [SerializeField] private float _maxSpeed = 10f;
+    [SerializeField] private float _energy = 1f;
 
     // Start is called before the first frame update
     void Start()

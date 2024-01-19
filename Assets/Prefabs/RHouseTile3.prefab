@@ -99,6 +99,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Casa_4_
       objectReference: {fileID: 0}
+    - target: {fileID: 5345732432393491934, guid: 14e623a4f6cae2b458fa13ad5fbc3b39,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bc425cee9a3c5fd44804e376908bcaf2, type: 2}
+    - target: {fileID: 7646715699437254486, guid: 14e623a4f6cae2b458fa13ad5fbc3b39,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bc425cee9a3c5fd44804e376908bcaf2, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14e623a4f6cae2b458fa13ad5fbc3b39, type: 3}
 --- !u!4 &5593507789929850600 stripped
