@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private Vector3 _direction;
 
+    [SerializeField] private StaminaBarController staminaBarController;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,7 +99,9 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetTrigger("hit");
             _impactParticles.Play();
+            staminaBarController.ReduzirEnergiaColisao();
             _dustParticles.Stop();
+
 
             forwardSpeed = Mathf.Min(forwardSpeed--, 10);
         }
