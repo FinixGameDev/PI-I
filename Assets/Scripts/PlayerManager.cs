@@ -48,8 +48,6 @@ public class PlayerManager : MonoBehaviour
     public float GetProgress()
     {
         float progress = (player.transform.position.z / winDistance);
-        Debug.Log(progress);
-
         return progress;
     }
 }

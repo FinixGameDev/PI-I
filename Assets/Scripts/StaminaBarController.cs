@@ -12,12 +12,13 @@ public class StaminaBarController : MonoBehaviour
     public Slider slider;
     [SerializeField] private float reducaoPorSegundo = 1f;
     [SerializeField] private float reducaoPorColisao = 10f;
+    [SerializeField] private float aumentoPorOsso = 1f;
     [SerializeField] private float updateRate = 0.2f;
     [SerializeField] private Color fullStamina;
     [SerializeField] private Color halfStamina;
     [SerializeField] private Color noStamina;
     private Color cor;
-    [SerializeField] private BoxCollider playerCollider;
+    [SerializeField] private BoxCollider playerCollider; //Isto não se pode tirar?? -D.R.
 
 
     void Start()
@@ -46,6 +47,15 @@ public class StaminaBarController : MonoBehaviour
         if (PlayerManager.isGameStarted)
         {
             slider.value -= reducaoPorColisao;
+            AtualizarCor();
+        }
+    }
+
+    public void AumentarEnergiaOsso()
+    {
+        if (PlayerManager.isGameStarted)
+        {
+            slider.value += aumentoPorOsso;
             AtualizarCor();
         }
     }

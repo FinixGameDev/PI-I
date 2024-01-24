@@ -21,7 +21,7 @@ public class TileManager : MonoBehaviour
             if (i == 0)
                 SpawnTile(0);
             else
-                SpawnTile(Random.Range(0, _tilePrefabs.Length));
+                SpawnTile(Random.Range(1, _tilePrefabs.Length));
         }
     }
 

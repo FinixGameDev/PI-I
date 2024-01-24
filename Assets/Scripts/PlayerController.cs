@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float forwardSpeed = 10f;
+    [SerializeField] private float _maxSpeed = 25f;
 
     [SerializeField] private float _strafeSpeed = 3.5f;
 
@@ -21,7 +22,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private Vector3 _direction;
 
-    [SerializeField] private StaminaBarController staminaBarController;
+    public StaminaBarController staminaBarController;
 
     // Start is called before the first frame update
     void Start()
@@ -36,13 +37,11 @@ public class PlayerController : MonoBehaviour
         _animator.speed = forwardSpeed / 10;
         _animator.SetBool("isGrounded", _controller.isGrounded);
 
-        forwardSpeed += 2f * Time.deltaTime;
+        forwardSpeed = Mathf.Lerp(forwardSpeed, _maxSpeed * (staminaBarController.slider.value / staminaBarController.slider.maxValue), 0.1f * Time.deltaTime) ;
 
         //Control DustParticles
         if (_controller.isGrounded && PlayerManager.isGameStarted)
-        {
             _dustParticles.Play();
-        }
         else
             _dustParticles.Stop();
 
@@ -68,6 +67,9 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(Slide());
         }
+
+        if (staminaBarController.slider.value == 0)
+            PlayerManager.gameOver = true;
     }
 
     private void FixedUpdate()
@@ -101,11 +103,7 @@ public class PlayerController : MonoBehaviour
             _impactParticles.Play();
             staminaBarController.ReduzirEnergiaColisao();
             _dustParticles.Stop();
-
-
-            forwardSpeed = Mathf.Min(forwardSpeed--, 10);
         }
-
     }
 
     private IEnumerator Slide()
