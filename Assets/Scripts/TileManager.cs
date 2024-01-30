@@ -21,7 +21,7 @@ public class TileManager : MonoBehaviour
             if (i == 0)
                 SpawnTile(0);
             else
-                SpawnTile(Random.Range(0, _tilePrefabs.Length));
+                SpawnTile(Random.Range(1, _tilePrefabs.Length));
         }
     }
 
@@ -38,7 +38,7 @@ public class TileManager : MonoBehaviour
 
     public void SpawnTile(int tileIndex)
     {
-        GameObject newTile = Instantiate(_tilePrefabs[tileIndex],transform.forward * _zSpawn, transform.rotation, this.transform);
+        GameObject newTile = Instantiate(_tilePrefabs[tileIndex],this.transform.position + (transform.forward * _zSpawn), transform.rotation, this.transform);
         _activeTiles.Add(newTile);
         _zSpawn += _tileLength;
     }
