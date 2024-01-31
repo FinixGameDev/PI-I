@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 506222903284352693}
   - component: {fileID: 506222903284352692}
   - component: {fileID: 506222903284352695}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Carro
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5607025092253229139}
   - component: {fileID: 5945703179294112764}
   - component: {fileID: 8902182591149643405}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Rodas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 7680068752542210360}
   - component: {fileID: 7680068752542210358}
   - component: {fileID: 7680068752542210361}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DustParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5041,7 +5041,7 @@ GameObject:
   - component: {fileID: 140078545500987697}
   - component: {fileID: 1178388064832302169}
   - component: {fileID: 3058073994685337023}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chassi
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1306,6 +1306,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3437218074536491982, guid: 9929f17160e0e3144aeea11b885cd80a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9929f17160e0e3144aeea11b885cd80a,
         type: 3}
       propertyPath: m_Name
@@ -1313,8 +1318,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9929f17160e0e3144aeea11b885cd80a,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9929f17160e0e3144aeea11b885cd80a,
+        type: 3}
       propertyPath: m_TagString
       value: Obstacle
+      objectReference: {fileID: 0}
+    - target: {fileID: 8601633415405686197, guid: 9929f17160e0e3144aeea11b885cd80a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9929f17160e0e3144aeea11b885cd80a, type: 3}

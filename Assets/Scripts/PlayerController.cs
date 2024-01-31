@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
         _animator.speed = forwardSpeed / 10;
         _animator.SetBool("isGrounded", _controller.isGrounded);
 
-        forwardSpeed = Mathf.Lerp(forwardSpeed, _maxSpeed * (staminaBarController.slider.value / staminaBarController.slider.maxValue), 0.1f * Time.deltaTime) ;
+        forwardSpeed = _maxSpeed * (staminaBarController.slider.value / staminaBarController.slider.maxValue);
 
         //Control DustParticles
         if (_controller.isGrounded && PlayerManager.isGameStarted)
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
             _dustParticles.Stop();
 
         //Check movement
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || SwipeManager.swipeUp) && _controller.isGrounded)
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || SwipeManager.swipeUp) && _controller.isGrounded && !_animator.GetBool("isSliding"))
             Jump();
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || SwipeManager.swipeRight)
@@ -103,18 +103,53 @@ public class PlayerController : MonoBehaviour
             _impactParticles.Play();
             staminaBarController.ReduzirEnergiaColisao();
             _dustParticles.Stop();
+            StartCoroutine("InvencibilityWindow", 3f);
         }
+    }
+
+    private IEnumerator InvencibilityWindow(float sec)
+    {
+        Physics.IgnoreLayerCollision(6, 7, true);
+        float timer = 0;
+        StartCoroutine("SetMesh", sec);
+
+        while (timer < sec)
+        {
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        Physics.IgnoreLayerCollision(6, 7, false);
+    }
+
+    private IEnumerator SetMesh(float sec)
+    {
+        var mesh = GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
+
+        float timer = 0;
+        while (timer < sec)
+        {
+            timer += 0.1f;
+            mesh.SetActive(!mesh.active);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        mesh.SetActive(true);
     }
 
     private IEnumerator Slide()
     {
-        _animator.SetTrigger("slide");
+        _animator.SetBool("isSliding", true);
         _controller.height = 1;
         _controller.center = new Vector3(0, -0.5f);
+        _gravity *= 3;
 
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSeconds(0.5f);
 
+        _animator.SetBool("isSliding", false);
+        _gravity /= 3;
         _controller.height = 2;
         _controller.center = Vector3.zero;
+
     }
 }
