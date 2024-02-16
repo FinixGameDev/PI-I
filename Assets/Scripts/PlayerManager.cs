@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -43,6 +44,16 @@ public class PlayerManager : MonoBehaviour
         }
 
         progressBar.fillAmount =  GetProgress();
+
+        if (progressBar.fillAmount >= 1)
+        {
+            WinGame();
+        }
+    }
+
+    public void WinGame()
+    {
+        SceneManager.LoadScene("DR_Cutscene_Outro");
     }
 
     public float GetProgress()

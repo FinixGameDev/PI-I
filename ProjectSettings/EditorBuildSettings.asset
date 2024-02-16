@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DR_Level.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/DR_Cutscene_Outro.unity
+    guid: 5366926d1b046b648aa51d07c351e0b8
+  - enabled: 1
+    path: Assets/Scenes/DR_Cutscene_Intro.unity
+    guid: 1b4fa51b9e74bd542ba28a3e6215b2b3
   m_configObjects: {}
