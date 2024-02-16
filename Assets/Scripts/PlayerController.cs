@@ -21,14 +21,20 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
     private CharacterController _controller;
     private Vector3 _direction;
+    private AudioSource _audioSource;
+
+    [SerializeField] private AudioClip _hitSFX;
 
     public StaminaBarController staminaBarController;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Evitar que os obstáculos fiquem desligados ao trocar de scene
+        Physics.IgnoreLayerCollision(6, 7, false);
         _controller = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called every frame
@@ -99,27 +105,28 @@ public class PlayerController : MonoBehaviour
     {
         if (hit.transform.tag == "Obstacle")
         {
-            _animator.SetTrigger("hit");
-            _impactParticles.Play();
-            staminaBarController.ReduzirEnergiaColisao();
-            _dustParticles.Stop();
-            StartCoroutine("InvencibilityWindow", 3f);
+            _audioSource.PlayOneShot(_hitSFX);            //Ativar Som
+            _animator.SetTrigger("hit");                  //Ativar Animação
+            _impactParticles.Play();                      //Emitir particulas de impacto
+            staminaBarController.ReduzirEnergiaColisao(); //Reduzir a motivação do cão em 300
+            _dustParticles.Stop();                        //Parar de emitir particulas de pó
+            StartCoroutine("InvencibilityWindow", 3f);    //Ligar I-frames durante 3 segundos
         }
     }
 
     private IEnumerator InvencibilityWindow(float sec)
     {
-        Physics.IgnoreLayerCollision(6, 7, true);
+        Physics.IgnoreLayerCollision(6, 7, true); //Desliga as colisões
         float timer = 0;
-        StartCoroutine("SetMesh", sec);
+        StartCoroutine("SetMesh", sec); //Coloca a mesh a piscar
 
-        while (timer < sec)
+        while (timer < sec) //Timer
         {
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 
-        Physics.IgnoreLayerCollision(6, 7, false);
+        Physics.IgnoreLayerCollision(6, 7, false); //Liga as colisões
     }
 
     private IEnumerator SetMesh(float sec)
@@ -130,11 +137,11 @@ public class PlayerController : MonoBehaviour
         while (timer < sec)
         {
             timer += 0.1f;
-            mesh.SetActive(!mesh.active);
+            mesh.SetActive(!mesh.active); //Inverte estado da mesh
             yield return new WaitForSeconds(0.1f);
         }
 
-        mesh.SetActive(true);
+        mesh.SetActive(true); //Coloca sempre no final a true
     }
 
     private IEnumerator Slide()
