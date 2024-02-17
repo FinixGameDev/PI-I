@@ -52,7 +52,8 @@ public class PlayerController : MonoBehaviour
             _dustParticles.Stop();
 
         //Check movement
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || SwipeManager.swipeUp) && _controller.isGrounded && !_animator.GetBool("isSliding"))
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) 
+            || SwipeManager.swipeUp) && _controller.isGrounded && !_animator.GetBool("isSliding"))
             Jump();
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || SwipeManager.swipeRight)
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
         if (staminaBarController.slider.value == 0)
             PlayerManager.gameOver = true;
     }
-
+    
     private void FixedUpdate()
     {
         float targetX = _desiredLane * _laneDistance - _laneDistance;
@@ -105,28 +106,28 @@ public class PlayerController : MonoBehaviour
     {
         if (hit.transform.tag == "Obstacle")
         {
-            _audioSource.PlayOneShot(_hitSFX);            //Ativar Som
-            _animator.SetTrigger("hit");                  //Ativar Animação
-            _impactParticles.Play();                      //Emitir particulas de impacto
-            staminaBarController.ReduzirEnergiaColisao(); //Reduzir a motivação do cão em 300
-            _dustParticles.Stop();                        //Parar de emitir particulas de pó
-            StartCoroutine("InvencibilityWindow", 3f);    //Ligar I-frames durante 3 segundos
+            _audioSource.PlayOneShot(_hitSFX);            
+            _animator.SetTrigger("hit");                 
+            _impactParticles.Play();                      
+            staminaBarController.ReduzirEnergiaColisao(); 
+            _dustParticles.Stop();                        
+            StartCoroutine("InvencibilityWindow", 3f);    
         }
     }
 
     private IEnumerator InvencibilityWindow(float sec)
     {
-        Physics.IgnoreLayerCollision(6, 7, true); //Desliga as colisões
+        Physics.IgnoreLayerCollision(6, 7, true); 
         float timer = 0;
-        StartCoroutine("SetMesh", sec); //Coloca a mesh a piscar
+        StartCoroutine("SetMesh", sec); 
 
-        while (timer < sec) //Timer
+        while (timer < sec) 
         {
             timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 
-        Physics.IgnoreLayerCollision(6, 7, false); //Liga as colisões
+        Physics.IgnoreLayerCollision(6, 7, false); 
     }
 
     private IEnumerator SetMesh(float sec)
@@ -137,11 +138,11 @@ public class PlayerController : MonoBehaviour
         while (timer < sec)
         {
             timer += 0.1f;
-            mesh.SetActive(!mesh.active); //Inverte estado da mesh
+            mesh.SetActive(!mesh.active); 
             yield return new WaitForSeconds(0.1f);
         }
 
-        mesh.SetActive(true); //Coloca sempre no final a true
+        mesh.SetActive(true); 
     }
 
     private IEnumerator Slide()
